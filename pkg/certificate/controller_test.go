@@ -28,8 +28,11 @@ import (
 	corev1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/types"
+	"k8s.io/utils/ptr"
+	"sigs.k8s.io/controller-runtime/pkg/config"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
+	metricsserver "sigs.k8s.io/controller-runtime/pkg/metrics/server"
 	"sigs.k8s.io/controller-runtime/pkg/reconcile"
 
 	"github.com/qinqon/kube-admission-webhook/pkg/certificate/triple"
@@ -321,10 +324,16 @@ var _ = Describe("Certificates controller", func() {
 			cancel    context.CancelFunc
 		)
 		BeforeEach(func(done Done) {
-
 			By("Creating new controller-runtime manager")
 			var err error
-			crManager, err = manager.New(testEnv.Config, manager.Options{MetricsBindAddress: "0"})
+			crManager, err = manager.New(
+				testEnv.Config,
+				manager.Options{
+					Metrics: metricsserver.Options{BindAddress: "0"},
+					Controller: config.Controller{
+						SkipNameValidation: ptr.To(true),
+					},
+				})
 			Expect(err).ToNot(HaveOccurred(), "should success creating controller-runtime manager")
 
 			err = mgr.Add(crManager)
