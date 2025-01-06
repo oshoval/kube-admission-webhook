@@ -21,7 +21,8 @@ linters-settings:
     lines: 100
     statements: 50
   gci:
-    local-prefixes: github.com/qinqon/kube-admisssion-webhook
+    sections:
+      - prefix(github.com/qinqon/kube-admisssion-webhook)
   goconst:
     min-len: 2
     min-occurrences: 2
@@ -47,13 +48,13 @@ linters-settings:
     template-path: header.tpl
   goimports:
     local-prefixes: github.com/qinqon/kube-admisssion-webhook
-  gomnd:
+  mnd:
     settings:
       mnd:
         # don't include the "operation" and "assign"
         checks: argument,case,condition,return
   govet:
-    check-shadowing: true
+    shadow: true
   lll:
     line-length: 140
   maligned:
@@ -79,7 +80,7 @@ linters:
     - dogsled
     - dupl
     - errcheck
-    - exportloopref
+    - copyloopvar
     - exhaustive
     - funlen
     - gochecknoinits
@@ -89,7 +90,7 @@ linters:
     - gofmt
     - goheader
     - goimports
-    - gomnd
+    - mnd
     - goprintffuncname
     - gosec
     - gosimple

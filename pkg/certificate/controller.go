@@ -219,18 +219,18 @@ func (m *Manager) Reconcile(ctx context.Context, request reconcile.Request) (rec
 		}
 	}
 
-	// Return the event that is going to happened sonner all services certificates rotation,
+	// Return the event that is going to happen sooner all services certificates rotation,
 	// services certificate rotation or ca bundle cleanup
 	m.log.Info("Calculating RequeueAfter", "elapsedToRotateCA", elapsedToRotateCA,
 		"elapsedToRotateServices", elapsedToRotateServices, "elapsedForCABundleCleanup",
 		elapsedForCABundleCleanup, "elapsedForServiceCertsCleanup", elapsedForServiceCertsCleanup)
-	requeueAfter := min(elapsedToRotateCA, elapsedToRotateServices, elapsedForCABundleCleanup, elapsedForServiceCertsCleanup)
+	requeueAfter := minDuration(elapsedToRotateCA, elapsedToRotateServices, elapsedForCABundleCleanup, elapsedForServiceCertsCleanup)
 
 	m.log.Info(fmt.Sprintf("Certificates will be Reconcile on %s", m.now().Add(requeueAfter)))
 	return reconcile.Result{RequeueAfter: requeueAfter}, nil
 }
 
-func min(values ...time.Duration) time.Duration {
+func minDuration(values ...time.Duration) time.Duration {
 	m := time.Duration(0)
 	for i, e := range values {
 		if i == 0 || e < m {
