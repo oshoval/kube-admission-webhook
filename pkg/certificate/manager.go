@@ -304,7 +304,8 @@ func (m *Manager) nextRotationDeadlineForCert(certificate *x509.Certificate, ove
 	deadlineDuration := totalDuration - float64(overlap)
 	deadline := certificate.NotBefore.Add(time.Duration(deadlineDuration))
 
-	m.log.Info(fmt.Sprintf("Certificate expiration is %v, totalDuration is %v, rotation deadline is %v", notAfter, totalDuration, deadline))
+	m.log.V(1).Info(fmt.Sprintf("Certificate expiration is %v, totalDuration is %v, rotation deadline is %v",
+		notAfter, totalDuration, deadline))
 	return deadline
 }
 
@@ -320,7 +321,8 @@ func (m *Manager) elapsedToRotateCAFromLastDeadline() time.Duration {
 	}
 	now := m.now()
 	elapsedToRotate := deadline.Sub(now)
-	m.log.Info(fmt.Sprintf("elapsedToRotateCAFromLastDeadline {now: %s, deadline: %s, elapsedToRotate: %s}", now, deadline, elapsedToRotate))
+	m.log.V(1).Info(fmt.Sprintf("elapsedToRotateCAFromLastDeadline {now: %s, deadline: %s, elapsedToRotate: %s}",
+		now, deadline, elapsedToRotate))
 	return elapsedToRotate
 }
 
@@ -336,7 +338,7 @@ func (m *Manager) elapsedToRotateServicesFromLastDeadline() time.Duration {
 	}
 	now := m.now()
 	elapsedToRotate := deadline.Sub(now)
-	m.log.Info(fmt.Sprintf("elapsedToRotateServicesFromLastDeadline{now: %s, deadline: %s, elapsedToRotate: %s}",
+	m.log.V(1).Info(fmt.Sprintf("elapsedToRotateServicesFromLastDeadline{now: %s, deadline: %s, elapsedToRotate: %s}",
 		now, deadline, elapsedToRotate))
 	return elapsedToRotate
 }
